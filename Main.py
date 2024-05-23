@@ -1,12 +1,18 @@
 import requests  
 
-# M - wind speed m/s 
-# T - no colors
-# q - quiet version
-# n - only day and night
-reqSheremetyevo = requests.get(url = "https://wttr.in/~Sheremetyevo?lang=ru&M&T&q&n")
-reqLondon = requests.get(url = "https://wttr.in/London?lang=ru&M&T&q&n")
-reqCherepovec = requests.get(url = "https://wttr.in/Cherepovec?lang=ru&M&T&q&n")
-print(reqSheremetyevo.text)
-print(reqLondon.text)
-print(reqCherepovec.text)
+if __name__ == '__main__':
+    payload = {
+                'lang': 'ru',
+                'T': '',
+                'q': '',
+                'M': '',    
+                'n': '', 
+            }  
+    for point in ['Sheremetyevo', 'London', 'Cherepovec']:
+        response = requests.get(url = f'https://wttr.in/{point}', params=payload) 
+        try:
+            response.raise_for_status()
+            if response.ok:
+                print(response.text)
+        except requests.exceptions.HTTPError:
+            print(f'Response for {point} failed. Status code: {response.status_code}') 
